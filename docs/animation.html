@@ -12908,57 +12908,137 @@ var _elm_lang$virtual_dom$Spinner$Rotate = function (a) {
 	return {ctor: 'Rotate', _0: a};
 };
 var _elm_lang$virtual_dom$Spinner$subscriptions = function (_p1) {
-	return A2(_elm_lang$core$Time$every, 100 * _elm_lang$core$Time$millisecond, _elm_lang$virtual_dom$Spinner$Rotate);
+	return A2(_elm_lang$core$Time$every, (1000 / 60) * _elm_lang$core$Time$millisecond, _elm_lang$virtual_dom$Spinner$Rotate);
 };
 var _elm_lang$virtual_dom$Animation$Model = F2(
+	function (a, b) {
+		return {spinner1: a, spinner2: b};
+	});
+var _elm_lang$virtual_dom$Animation$SpinnerState = F2(
 	function (a, b) {
 		return {spinner: a, colored: b};
 	});
 var _elm_lang$virtual_dom$Animation$ToggleColor = function (a) {
 	return {ctor: 'ToggleColor', _0: a};
 };
-var _elm_lang$virtual_dom$Animation$SpinnerMsg = function (a) {
-	return {ctor: 'SpinnerMsg', _0: a};
-};
-var _elm_lang$virtual_dom$Animation$init = A2(
-	_elm_lang$core$Platform_Cmd_ops['!'],
-	{
-		spinner: _elm_lang$core$Tuple$first(_elm_lang$virtual_dom$Spinner$init),
-		colored: true
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_elm_lang$core$Platform_Cmd$map,
-			_elm_lang$virtual_dom$Animation$SpinnerMsg,
-			_elm_lang$core$Tuple$second(_elm_lang$virtual_dom$Spinner$init)),
-		_1: {ctor: '[]'}
+var _elm_lang$virtual_dom$Animation$SpinnerMsg = F2(
+	function (a, b) {
+		return {ctor: 'SpinnerMsg', _0: a, _1: b};
 	});
+var _elm_lang$virtual_dom$Animation$init = {
+	ctor: '_Tuple2',
+	_0: {
+		spinner1: A2(
+			_elm_lang$virtual_dom$Animation$SpinnerState,
+			_elm_lang$core$Tuple$first(_elm_lang$virtual_dom$Spinner$init),
+			true),
+		spinner2: A2(
+			_elm_lang$virtual_dom$Animation$SpinnerState,
+			_elm_lang$core$Tuple$first(_elm_lang$virtual_dom$Spinner$init),
+			false)
+	},
+	_1: _elm_lang$core$Platform_Cmd$batch(
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$core$Platform_Cmd$map,
+				_elm_lang$virtual_dom$Animation$SpinnerMsg(1),
+				_elm_lang$core$Tuple$second(_elm_lang$virtual_dom$Spinner$init)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$core$Platform_Cmd$map,
+					_elm_lang$virtual_dom$Animation$SpinnerMsg(2),
+					_elm_lang$core$Tuple$second(_elm_lang$virtual_dom$Spinner$init)),
+				_1: {ctor: '[]'}
+			}
+		})
+};
 var _elm_lang$virtual_dom$Animation$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		if (_p0.ctor === 'SpinnerMsg') {
-			var _p1 = A2(_elm_lang$virtual_dom$Spinner$update, _p0._0, model.spinner);
-			var spinner = _p1._0;
-			var cmd = _p1._1;
-			return A2(
-				_elm_lang$core$Platform_Cmd_ops['!'],
-				_elm_lang$core$Native_Utils.update(
-					model,
-					{spinner: spinner}),
-				{
-					ctor: '::',
-					_0: A2(_elm_lang$core$Platform_Cmd$map, _elm_lang$virtual_dom$Animation$SpinnerMsg, cmd),
-					_1: {ctor: '[]'}
-				});
-		} else {
-			return A2(
-				_elm_lang$core$Platform_Cmd_ops['!'],
-				_elm_lang$core$Native_Utils.update(
-					model,
-					{colored: !model.colored}),
-				{ctor: '[]'});
-		}
+		_v0_4:
+		do {
+			if (_p0.ctor === 'SpinnerMsg') {
+				switch (_p0._0) {
+					case 1:
+						var spinner1 = model.spinner1;
+						var _p1 = A2(_elm_lang$virtual_dom$Spinner$update, _p0._1, model.spinner1.spinner);
+						var spinner = _p1._0;
+						var cmd = _p1._1;
+						var newSpinner1 = _elm_lang$core$Native_Utils.update(
+							spinner1,
+							{spinner: spinner});
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{spinner1: newSpinner1}),
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$core$Platform_Cmd$map,
+									_elm_lang$virtual_dom$Animation$SpinnerMsg(1),
+									cmd),
+								_1: {ctor: '[]'}
+							});
+					case 2:
+						var spinner2 = model.spinner2;
+						var _p2 = A2(_elm_lang$virtual_dom$Spinner$update, _p0._1, model.spinner2.spinner);
+						var spinner = _p2._0;
+						var cmd = _p2._1;
+						var newSpinner2 = _elm_lang$core$Native_Utils.update(
+							spinner2,
+							{spinner: spinner});
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{spinner2: newSpinner2}),
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$core$Platform_Cmd$map,
+									_elm_lang$virtual_dom$Animation$SpinnerMsg(2),
+									cmd),
+								_1: {ctor: '[]'}
+							});
+					default:
+						break _v0_4;
+				}
+			} else {
+				switch (_p0._0) {
+					case 1:
+						var spinner1 = model.spinner1;
+						var newSpinner1 = _elm_lang$core$Native_Utils.update(
+							spinner1,
+							{colored: !spinner1.colored});
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{spinner1: newSpinner1}),
+							{ctor: '[]'});
+					case 2:
+						var spinner2 = model.spinner2;
+						var newSpinner2 = _elm_lang$core$Native_Utils.update(
+							spinner2,
+							{colored: !spinner2.colored});
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{spinner2: newSpinner2}),
+							{ctor: '[]'});
+					default:
+						break _v0_4;
+				}
+			}
+		} while(false);
+		return A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			model,
+			{ctor: '[]'});
 	});
 var _elm_lang$virtual_dom$Animation$view = function (model) {
 	return A2(
@@ -12968,9 +13048,16 @@ var _elm_lang$virtual_dom$Animation$view = function (model) {
 			ctor: '::',
 			_0: A2(
 				_elm_lang$virtual_dom$AltHtml$map,
-				_elm_lang$virtual_dom$Animation$SpinnerMsg,
-				A3(_elm_lang$virtual_dom$Spinner$view, 100, model.colored, model.spinner)),
-			_1: {ctor: '[]'}
+				_elm_lang$virtual_dom$Animation$SpinnerMsg(1),
+				A3(_elm_lang$virtual_dom$Spinner$view, 100, model.spinner1.colored, model.spinner1.spinner)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$virtual_dom$AltHtml$map,
+					_elm_lang$virtual_dom$Animation$SpinnerMsg(2),
+					A3(_elm_lang$virtual_dom$Spinner$view, 200, model.spinner2.colored, model.spinner2.spinner)),
+				_1: {ctor: '[]'}
+			}
 		});
 };
 var _elm_lang$virtual_dom$Animation$main = _elm_lang$virtual_dom$AltHtml$program(
@@ -12982,14 +13069,35 @@ var _elm_lang$virtual_dom$Animation$main = _elm_lang$virtual_dom$AltHtml$program
 			return _elm_lang$core$Platform_Sub$batch(
 				{
 					ctor: '::',
-					_0: A2(_elm_lang$core$Time$every, 3 * _elm_lang$core$Time$second, _elm_lang$virtual_dom$Animation$ToggleColor),
+					_0: A2(
+						_elm_lang$core$Time$every,
+						3 * _elm_lang$core$Time$second,
+						function (_p3) {
+							return _elm_lang$virtual_dom$Animation$ToggleColor(1);
+						}),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$core$Platform_Sub$map,
-							_elm_lang$virtual_dom$Animation$SpinnerMsg,
-							_elm_lang$virtual_dom$Spinner$subscriptions(model.spinner)),
-						_1: {ctor: '[]'}
+							_elm_lang$core$Time$every,
+							3 * _elm_lang$core$Time$second,
+							function (_p4) {
+								return _elm_lang$virtual_dom$Animation$ToggleColor(2);
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Platform_Sub$map,
+								_elm_lang$virtual_dom$Animation$SpinnerMsg(1),
+								_elm_lang$virtual_dom$Spinner$subscriptions(model.spinner1.spinner)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$core$Platform_Sub$map,
+									_elm_lang$virtual_dom$Animation$SpinnerMsg(2),
+									_elm_lang$virtual_dom$Spinner$subscriptions(model.spinner2.spinner)),
+								_1: {ctor: '[]'}
+							}
+						}
 					}
 				});
 		}
@@ -12997,7 +13105,7 @@ var _elm_lang$virtual_dom$Animation$main = _elm_lang$virtual_dom$AltHtml$program
 var Elm = {};
 Elm['Animation'] = Elm['Animation'] || {};
 if (typeof _elm_lang$virtual_dom$Animation$main !== 'undefined') {
-    _elm_lang$virtual_dom$Animation$main(Elm['Animation'], 'Animation', {"types":{"unions":{"Spinner.Msg":{"args":[],"tags":{"ToggleRotation":[],"Rotate":["Time.Time"]}},"Animation.Msg":{"args":[],"tags":{"SpinnerMsg":["Spinner.Msg"],"ToggleColor":["Time.Time"]}}},"aliases":{"Time.Time":{"args":[],"type":"Float"}},"message":"Animation.Msg"},"versions":{"elm":"0.18.0"}});
+    _elm_lang$virtual_dom$Animation$main(Elm['Animation'], 'Animation', {"types":{"unions":{"Spinner.Msg":{"args":[],"tags":{"ToggleRotation":[],"Rotate":["Time.Time"]}},"Animation.Msg":{"args":[],"tags":{"SpinnerMsg":["Int","Spinner.Msg"],"ToggleColor":["Int"]}}},"aliases":{"Time.Time":{"args":[],"type":"Float"}},"message":"Animation.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

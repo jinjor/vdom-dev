@@ -12908,7 +12908,7 @@ var _elm_lang$virtual_dom$Spinner$Rotate = function (a) {
 	return {ctor: 'Rotate', _0: a};
 };
 var _elm_lang$virtual_dom$Spinner$subscriptions = function (_p1) {
-	return A2(_elm_lang$core$Time$every, 100 * _elm_lang$core$Time$millisecond, _elm_lang$virtual_dom$Spinner$Rotate);
+	return A2(_elm_lang$core$Time$every, (1000 / 60) * _elm_lang$core$Time$millisecond, _elm_lang$virtual_dom$Spinner$Rotate);
 };
 var Elm = {};
 Elm['Spinner'] = Elm['Spinner'] || {};

@@ -35,7 +35,7 @@ update msg model =
 
 subscriptions : Spinner -> Sub Msg
 subscriptions _ =
-  Time.every (100 * millisecond) Rotate
+  Time.every ((1000/60) * millisecond) Rotate
 
 
 view : Int -> Bool -> Spinner -> Html Msg
