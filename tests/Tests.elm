@@ -71,6 +71,20 @@ historyC3 =
   |> List.foldl (\f history -> f 0 history) empty
 
 
+historyD =
+  [ History.openGroup (Address 0 1 0)
+  , History.openGroup (Address 0 2 9)
+  ]
+  |> List.foldl (\f history -> (f >> Tuple.first) history) historyC
+
+
+historyD1 =
+  [ History.closeGroup (Address 0 1 0)
+  , History.closeGroup (Address 0 2 9)
+  ]
+  |> List.foldl (\f history -> (f >> Tuple.first) history) historyD
+
+
 assertGet history expect snapshotIndex groupIndex msgIndex = \() ->
   Expect.equal expect <|
     History.get
@@ -135,6 +149,14 @@ testHistory =
     , test "jump down 4" <| assertShift historyC3 (Just (Address 0 0 1)) True 0 0 0
     , test "jump down 4" <| assertShift historyC3 (Just (Address 0 0 2)) True 0 0 1
     , test "jump down 4" <| assertShift historyC3 (Nothing) True 0 0 2
+    , test "open group" <| assertShift historyD (Just (Address 0 1 4)) False 0 1 5
+    , test "open group" <| assertShift historyD (Just (Address 0 1 6)) True 0 1 5
+    , test "open group" <| assertShift historyD (Just (Address 0 2 4)) False 0 2 5
+    , test "open group" <| assertShift historyD (Just (Address 0 2 6)) True 0 2 5
+    , test "close group" <| assertShift historyD1 (Just (Address 0 0 9)) False 0 1 5
+    , test "close group" <| assertShift historyD1 (Just (Address 0 2 0)) True 0 1 5
+    , test "close group" <| assertShift historyD1 (Just (Address 0 1 9)) False 0 2 5
+    , test "close group" <| assertShift historyD1 (Just (Address 0 3 0)) True 0 2 5
     , test "latestAddress" <| assertLatest empty Nothing
     , test "latestAddress" <| assertLatest historyA (Just <| Address 0 2 0)
     , test "latestAddress" <| assertLatest historyB (Just <| Address 0 4 1)

@@ -10858,8 +10858,8 @@ var _elm_lang$virtual_dom$VirtualDom_History$undone = function (getResult) {
 		return _elm_lang$core$Native_Utils.crashCase(
 			'VirtualDom.History',
 			{
-				start: {line: 306, column: 3},
-				end: {line: 311, column: 39}
+				start: {line: 315, column: 3},
+				end: {line: 320, column: 39}
 			},
 			_p1)('Bug in History.get');
 	}
@@ -10999,8 +10999,8 @@ var _elm_lang$virtual_dom$VirtualDom_History$addRecent = F6(
 					return _elm_lang$core$Native_Utils.crashCase(
 						'VirtualDom.History',
 						{
-							start: {line: 195, column: 9},
-							end: {line: 199, column: 37}
+							start: {line: 201, column: 9},
+							end: {line: 205, column: 37}
 						},
 						_p10)('Bug in add');
 				}
@@ -11134,8 +11134,8 @@ var _elm_lang$virtual_dom$VirtualDom_History$toggleGroup = F3(
 			return _elm_lang$core$Native_Utils.crashCase(
 				'VirtualDom.History',
 				{
-					start: {line: 371, column: 3},
-					end: {line: 385, column: 88}
+					start: {line: 380, column: 3},
+					end: {line: 394, column: 88}
 				},
 				_p20)(
 				A2(
@@ -11182,8 +11182,8 @@ var _elm_lang$virtual_dom$VirtualDom_History$nextVisibleAddress = F3(
 			return _elm_lang$core$Native_Utils.crashCase(
 				'VirtualDom.History',
 				{
-					start: {line: 337, column: 3},
-					end: {line: 346, column: 85}
+					start: {line: 346, column: 3},
+					end: {line: 355, column: 85}
 				},
 				_p24)(
 				A2(
@@ -11257,8 +11257,8 @@ var _elm_lang$virtual_dom$VirtualDom_History$get = F3(
 			return _elm_lang$core$Native_Utils.crashCase(
 				'VirtualDom.History',
 				{
-					start: {line: 259, column: 3},
-					end: {line: 269, column: 88}
+					start: {line: 265, column: 3},
+					end: {line: 278, column: 88}
 				},
 				_p33)(
 				A2(
@@ -11328,7 +11328,7 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewRow = F3(
 				}
 			});
 	});
-var _elm_lang$virtual_dom$VirtualDom_History$viewClosedMessage = F5(
+var _elm_lang$virtual_dom$VirtualDom_History$viewClosedGroup = F5(
 	function (currentAddress, groupIndex, firstIndex, lastIndex, msg) {
 		var indexStr = A2(
 			_elm_lang$core$Basics_ops['++'],
@@ -11425,7 +11425,7 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewGroup = F4(
 		var children = group.closed ? {
 			ctor: '::',
 			_0: A5(
-				_elm_lang$virtual_dom$VirtualDom_History$viewClosedMessage,
+				_elm_lang$virtual_dom$VirtualDom_History$viewClosedGroup,
 				currentAddress,
 				groupIndex,
 				(index - group.numMessages) + 1,
@@ -11497,7 +11497,7 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewSnapshot = F3(
 					_elm_lang$virtual_dom$VirtualDom_History$consGroup(currentAddress),
 					{
 						ctor: '_Tuple3',
-						_0: index - 1,
+						_0: index,
 						_1: _elm_lang$core$Array$length(_p52) - 1,
 						_2: {ctor: '[]'}
 					},
@@ -11530,7 +11530,7 @@ var _elm_lang$virtual_dom$VirtualDom_History$consSnapshot = F3(
 		};
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$viewSnapshots = F3(
-	function (currentAddress, highIndex, snapshots) {
+	function (currentAddress, index, snapshots) {
 		return A2(
 			_elm_lang$virtual_dom$VirtualDom_Helpers$div,
 			{ctor: '[]'},
@@ -11543,7 +11543,7 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewSnapshots = F3(
 					_elm_lang$virtual_dom$VirtualDom_History$consSnapshot(currentAddress),
 					{
 						ctor: '_Tuple3',
-						_0: highIndex,
+						_0: index,
 						_1: _elm_lang$core$Array$length(snapshots) - 1,
 						_2: {ctor: '[]'}
 					},
@@ -11552,13 +11552,13 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewSnapshots = F3(
 var _elm_lang$virtual_dom$VirtualDom_History$view = F2(
 	function (currentAddress, _p59) {
 		var _p60 = _p59;
-		var _p65 = _p60.snapshots;
-		var _p64 = _p60.recent;
-		var _p63 = _p60.numMessages;
+		var _p63 = _p60.snapshots;
+		var _p62 = _p60.recent;
+		var _p61 = _p60.numMessages;
 		var currentAddressHelp = A2(
 			_elm_lang$core$Maybe$andThen,
 			_elm_lang$virtual_dom$VirtualDom_History$filterAddressBySnapshot(
-				_elm_lang$core$Array$length(_p65)),
+				_elm_lang$core$Array$length(_p63)),
 			currentAddress);
 		var newStuff = A2(
 			_elm_lang$virtual_dom$VirtualDom_Helpers$map,
@@ -11566,25 +11566,9 @@ var _elm_lang$virtual_dom$VirtualDom_History$view = F2(
 				function (x, y) {
 					return y(x);
 				})(
-				_elm_lang$core$Array$length(_p65)),
-			A2(
-				_elm_lang$virtual_dom$VirtualDom_Helpers$div,
-				{ctor: '[]'},
-				function (_p61) {
-					var _p62 = _p61;
-					return _p62._2;
-				}(
-					A3(
-						_elm_lang$core$Array$foldr,
-						_elm_lang$virtual_dom$VirtualDom_History$consGroup(currentAddressHelp),
-						{
-							ctor: '_Tuple3',
-							_0: _p63 - 1,
-							_1: _elm_lang$core$Array$length(_p64.groups) - 1,
-							_2: {ctor: '[]'}
-						},
-						_p64.groups))));
-		var oldStuff = A4(_elm_lang$virtual_dom$VirtualDom_Helpers$lazy3, _elm_lang$virtual_dom$VirtualDom_History$viewSnapshots, currentAddress, _p63 - _p64.numMessages, _p65);
+				_elm_lang$core$Array$length(_p63)),
+			A4(_elm_lang$virtual_dom$VirtualDom_Helpers$lazy3, _elm_lang$virtual_dom$VirtualDom_History$viewSnapshot, currentAddressHelp, _p61 - 1, _p62));
+		var oldStuff = A4(_elm_lang$virtual_dom$VirtualDom_Helpers$lazy3, _elm_lang$virtual_dom$VirtualDom_History$viewSnapshots, currentAddress, (_p61 - _p62.numMessages) - 1, _p63);
 		var className = _elm_lang$core$Native_Utils.eq(currentAddress, _elm_lang$core$Maybe$Nothing) ? 'debugger-sidebar-messages' : 'debugger-sidebar-messages-paused';
 		return A2(
 			_elm_lang$virtual_dom$VirtualDom_Helpers$div,
