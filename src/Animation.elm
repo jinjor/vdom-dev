@@ -12,7 +12,7 @@ main = program
   , view = view
   , subscriptions = \model ->
     Sub.batch
-      [ Time.every (3 * second) ToggleColor
+      [ Time.every (2 * second) ToggleColor
       , Sub.map SpinnerMsg (Spinner.subscriptions model.spinner)
       ]
   }

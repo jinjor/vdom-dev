@@ -10635,20 +10635,51 @@ var _elm_lang$virtual_dom$VirtualDom_Metadata$decode = function (value) {
 	}
 };
 
-var _elm_lang$virtual_dom$VirtualDom_History$filterBy = F3(
+var _elm_lang$virtual_dom$VirtualDom_History$filterAddressBy = F3(
 	function (f, index, address) {
 		return _elm_lang$core$Native_Utils.eq(
 			f(address),
 			index) ? _elm_lang$core$Maybe$Just(address) : _elm_lang$core$Maybe$Nothing;
 	});
-var _elm_lang$virtual_dom$VirtualDom_History$filterByGroup = _elm_lang$virtual_dom$VirtualDom_History$filterBy(
+var _elm_lang$virtual_dom$VirtualDom_History$filterAddressByGroup = _elm_lang$virtual_dom$VirtualDom_History$filterAddressBy(
 	function (_) {
 		return _.group;
 	});
-var _elm_lang$virtual_dom$VirtualDom_History$filterBySnapshot = _elm_lang$virtual_dom$VirtualDom_History$filterBy(
+var _elm_lang$virtual_dom$VirtualDom_History$filterAddressBySnapshot = _elm_lang$virtual_dom$VirtualDom_History$filterAddressBy(
 	function (_) {
 		return _.snapshot;
 	});
+var _elm_lang$virtual_dom$VirtualDom_History$incrementSnapshot = function (address) {
+	return _elm_lang$core$Native_Utils.update(
+		address,
+		{snapshot: address.snapshot + 1, group: 0, message: 0});
+};
+var _elm_lang$virtual_dom$VirtualDom_History$incrementGroup = function (address) {
+	return _elm_lang$core$Native_Utils.update(
+		address,
+		{group: address.group + 1, message: 0});
+};
+var _elm_lang$virtual_dom$VirtualDom_History$decrement = function (address) {
+	return _elm_lang$core$Native_Utils.update(
+		address,
+		{message: address.message - 1});
+};
+var _elm_lang$virtual_dom$VirtualDom_History$increment = function (address) {
+	return _elm_lang$core$Native_Utils.update(
+		address,
+		{message: address.message + 1});
+};
+var _elm_lang$virtual_dom$VirtualDom_History$lastIndex = -2;
+var _elm_lang$virtual_dom$VirtualDom_History$decrementGroup = function (address) {
+	return _elm_lang$core$Native_Utils.update(
+		address,
+		{group: address.group - 1, message: _elm_lang$virtual_dom$VirtualDom_History$lastIndex});
+};
+var _elm_lang$virtual_dom$VirtualDom_History$decrementSnapshot = function (address) {
+	return _elm_lang$core$Native_Utils.update(
+		address,
+		{snapshot: address.snapshot - 1, group: _elm_lang$virtual_dom$VirtualDom_History$lastIndex, message: _elm_lang$virtual_dom$VirtualDom_History$lastIndex});
+};
 var _elm_lang$virtual_dom$VirtualDom_History$groupToggleButton = function (s) {
 	return A2(
 		_elm_lang$virtual_dom$VirtualDom_Helpers$div,
@@ -10675,9 +10706,7 @@ var _elm_lang$virtual_dom$VirtualDom_History$groupToggleButton = function (s) {
 		});
 };
 var _elm_lang$virtual_dom$VirtualDom_History$groupFolderHelp = function (group) {
-	if (_elm_lang$core$Native_Utils.cmp(
-		_elm_lang$core$List$length(group.messages),
-		1) < 1) {
+	if (_elm_lang$core$Native_Utils.cmp(group.numMessages, 1) < 1) {
 		return {ctor: '[]'};
 	} else {
 		if (group.collapsed) {
@@ -10687,8 +10716,7 @@ var _elm_lang$virtual_dom$VirtualDom_History$groupFolderHelp = function (group) 
 				_1: {ctor: '[]'}
 			};
 		} else {
-			var height = (_elm_lang$core$Basics$toFloat(
-				_elm_lang$core$List$length(group.messages)) - 1.5) * 26;
+			var height = (_elm_lang$core$Basics$toFloat(group.numMessages) - 1.5) * 26;
 			var groupGuide = A2(
 				_elm_lang$virtual_dom$VirtualDom_Helpers$div,
 				{
@@ -10725,161 +10753,139 @@ var _elm_lang$virtual_dom$VirtualDom_History$groupFolderHelp = function (group) 
 		}
 	}
 };
-var _elm_lang$virtual_dom$VirtualDom_History$findSnapshot = F2(
-	function (address, history) {
-		return (_elm_lang$core$Native_Utils.cmp(address.snapshot, 0) < 0) ? _elm_lang$core$Maybe$Nothing : (_elm_lang$core$Native_Utils.eq(
-			address.snapshot,
-			_elm_lang$core$Array$length(history.snapshots)) ? _elm_lang$core$Maybe$Just(history.recent) : A2(_elm_lang$core$Array$get, address.snapshot, history.snapshots));
+var _elm_lang$virtual_dom$VirtualDom_History$getSnapshot = F2(
+	function (snapshotIndex, history) {
+		return (_elm_lang$core$Native_Utils.cmp(snapshotIndex, 0) < 0) ? _elm_lang$core$Maybe$Nothing : (_elm_lang$core$Native_Utils.eq(
+			snapshotIndex,
+			_elm_lang$core$Array$length(history.snapshots)) ? _elm_lang$core$Maybe$Just(history.recent) : A2(_elm_lang$core$Array$get, snapshotIndex, history.snapshots));
 	});
-var _elm_lang$virtual_dom$VirtualDom_History$arrayUpdate = F3(
-	function (f, index, array) {
-		var _p0 = f(
-			A2(_elm_lang$core$Array$get, index, array));
-		if (_p0.ctor === 'Just') {
-			return A3(_elm_lang$core$Array$set, index, _p0._0, array);
-		} else {
-			return array;
-		}
-	});
-var _elm_lang$virtual_dom$VirtualDom_History$incrementSnapshot = function (address) {
-	return _elm_lang$core$Native_Utils.update(
-		address,
-		{snapshot: address.snapshot + 1, group: 0, message: 0});
-};
-var _elm_lang$virtual_dom$VirtualDom_History$incrementGroup = function (address) {
-	return _elm_lang$core$Native_Utils.update(
-		address,
-		{group: address.group + 1, message: 0});
-};
-var _elm_lang$virtual_dom$VirtualDom_History$decrement = function (address) {
-	return _elm_lang$core$Native_Utils.update(
-		address,
-		{message: address.message - 1});
-};
-var _elm_lang$virtual_dom$VirtualDom_History$increment = function (address) {
-	return _elm_lang$core$Native_Utils.update(
-		address,
-		{message: address.message + 1});
-};
-var _elm_lang$virtual_dom$VirtualDom_History$lastIndex = -2;
-var _elm_lang$virtual_dom$VirtualDom_History$decrementGroup = function (address) {
-	return _elm_lang$core$Native_Utils.update(
-		address,
-		{group: address.group - 1, message: _elm_lang$virtual_dom$VirtualDom_History$lastIndex});
-};
-var _elm_lang$virtual_dom$VirtualDom_History$nextAddress = F2(
-	function (forward, groupCollapsed) {
-		return groupCollapsed ? (forward ? _elm_lang$virtual_dom$VirtualDom_History$incrementGroup : _elm_lang$virtual_dom$VirtualDom_History$decrementGroup) : (forward ? _elm_lang$virtual_dom$VirtualDom_History$increment : _elm_lang$virtual_dom$VirtualDom_History$decrement);
-	});
-var _elm_lang$virtual_dom$VirtualDom_History$decrementSnapshot = function (address) {
-	return _elm_lang$core$Native_Utils.update(
-		address,
-		{snapshot: address.snapshot - 1, group: _elm_lang$virtual_dom$VirtualDom_History$lastIndex, message: _elm_lang$virtual_dom$VirtualDom_History$lastIndex});
-};
-var _elm_lang$virtual_dom$VirtualDom_History$findGroup = F2(
-	function (address, history) {
-		findGroup:
-		while (true) {
-			if (_elm_lang$core$Native_Utils.eq(address.group, -1)) {
-				var _v1 = _elm_lang$virtual_dom$VirtualDom_History$decrementSnapshot(address),
-					_v2 = history;
-				address = _v1;
-				history = _v2;
-				continue findGroup;
-			} else {
-				return A2(
-					_elm_lang$core$Maybe$andThen,
-					function (snapshot) {
-						if (_elm_lang$core$Native_Utils.cmp(
-							address.group,
-							_elm_lang$core$Array$length(snapshot.groups)) > -1) {
-							return A2(
-								_elm_lang$virtual_dom$VirtualDom_History$findGroup,
-								_elm_lang$virtual_dom$VirtualDom_History$incrementSnapshot(address),
-								history);
-						} else {
-							var newAddress = _elm_lang$core$Native_Utils.eq(address.group, _elm_lang$virtual_dom$VirtualDom_History$lastIndex) ? _elm_lang$core$Native_Utils.update(
-								address,
-								{
-									group: _elm_lang$core$Array$length(snapshot.groups) - 1
-								}) : address;
-							return A2(
-								_elm_lang$core$Maybe$map,
-								function (group) {
-									return {ctor: '_Tuple2', _0: group, _1: newAddress};
-								},
-								A2(_elm_lang$core$Array$get, newAddress.group, snapshot.groups));
-						}
-					},
-					A2(_elm_lang$virtual_dom$VirtualDom_History$findSnapshot, address, history));
-			}
-		}
+var _elm_lang$virtual_dom$VirtualDom_History$getGroup = F3(
+	function (snapshotIndex, groupIndex, history) {
+		return A2(
+			_elm_lang$core$Maybe$andThen,
+			function (snapshot) {
+				return A2(_elm_lang$core$Array$get, groupIndex, snapshot.groups);
+			},
+			A2(_elm_lang$virtual_dom$VirtualDom_History$getSnapshot, snapshotIndex, history));
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$validateAddress = F2(
 	function (history, address) {
 		validateAddress:
 		while (true) {
 			if (_elm_lang$core$Native_Utils.eq(address.message, -1)) {
-				var _v3 = history,
-					_v4 = _elm_lang$virtual_dom$VirtualDom_History$decrementGroup(address);
-				history = _v3;
-				address = _v4;
+				var _v0 = history,
+					_v1 = _elm_lang$virtual_dom$VirtualDom_History$decrementGroup(address);
+				history = _v0;
+				address = _v1;
 				continue validateAddress;
 			} else {
-				return A2(
-					_elm_lang$core$Maybe$andThen,
-					function (_p1) {
-						var _p2 = _p1;
-						var _p4 = _p2._0;
-						var _p3 = _p2._1;
-						return (_elm_lang$core$Native_Utils.cmp(_p3.message, _p4.numMessages) > -1) ? A2(
-							_elm_lang$virtual_dom$VirtualDom_History$validateAddress,
-							history,
-							_elm_lang$virtual_dom$VirtualDom_History$incrementGroup(_p3)) : ((_p4.collapsed || _elm_lang$core$Native_Utils.eq(_p3.message, _elm_lang$virtual_dom$VirtualDom_History$lastIndex)) ? _elm_lang$core$Maybe$Just(
-							_elm_lang$core$Native_Utils.update(
-								_p3,
-								{message: _p4.numMessages - 1})) : _elm_lang$core$Maybe$Just(_p3));
-					},
-					A2(_elm_lang$virtual_dom$VirtualDom_History$findGroup, address, history));
+				if (_elm_lang$core$Native_Utils.eq(address.group, -1)) {
+					var _v2 = history,
+						_v3 = _elm_lang$virtual_dom$VirtualDom_History$decrementSnapshot(address);
+					history = _v2;
+					address = _v3;
+					continue validateAddress;
+				} else {
+					return A2(
+						_elm_lang$core$Maybe$andThen,
+						function (snapshot) {
+							return (_elm_lang$core$Native_Utils.cmp(
+								address.group,
+								_elm_lang$core$Array$length(snapshot.groups)) > -1) ? A2(
+								_elm_lang$virtual_dom$VirtualDom_History$validateAddress,
+								history,
+								_elm_lang$virtual_dom$VirtualDom_History$incrementSnapshot(address)) : (_elm_lang$core$Native_Utils.eq(address.group, _elm_lang$virtual_dom$VirtualDom_History$lastIndex) ? A2(
+								_elm_lang$virtual_dom$VirtualDom_History$validateAddress,
+								history,
+								_elm_lang$core$Native_Utils.update(
+									address,
+									{
+										group: _elm_lang$core$Array$length(snapshot.groups) - 1
+									})) : A2(
+								_elm_lang$core$Maybe$andThen,
+								function (group) {
+									return (_elm_lang$core$Native_Utils.cmp(address.message, group.numMessages) > -1) ? A2(
+										_elm_lang$virtual_dom$VirtualDom_History$validateAddress,
+										history,
+										_elm_lang$virtual_dom$VirtualDom_History$incrementGroup(address)) : (_elm_lang$core$Native_Utils.eq(address.message, _elm_lang$virtual_dom$VirtualDom_History$lastIndex) ? _elm_lang$core$Maybe$Just(
+										_elm_lang$core$Native_Utils.update(
+											address,
+											{message: group.numMessages - 1})) : _elm_lang$core$Maybe$Just(address));
+								},
+								A3(_elm_lang$virtual_dom$VirtualDom_History$getGroup, address.snapshot, address.group, history)));
+						},
+						A2(_elm_lang$virtual_dom$VirtualDom_History$getSnapshot, address.snapshot, history));
+				}
 			}
 		}
 	});
+var _elm_lang$virtual_dom$VirtualDom_History$arrayUpdate = F3(
+	function (f, index, array) {
+		var _p0 = A2(_elm_lang$core$Array$get, index, array);
+		if (_p0.ctor === 'Just') {
+			return A3(
+				_elm_lang$core$Array$set,
+				index,
+				f(_p0._0),
+				array);
+		} else {
+			return array;
+		}
+	});
+var _elm_lang$virtual_dom$VirtualDom_History$updateSnapshot = F3(
+	function (f, snapshotIndex, history) {
+		return _elm_lang$core$Native_Utils.eq(
+			snapshotIndex,
+			_elm_lang$core$Array$length(history.snapshots)) ? _elm_lang$core$Native_Utils.update(
+			history,
+			{
+				recent: f(history.recent)
+			}) : _elm_lang$core$Native_Utils.update(
+			history,
+			{
+				snapshots: A3(_elm_lang$virtual_dom$VirtualDom_History$arrayUpdate, f, snapshotIndex, history.snapshots)
+			});
+	});
+var _elm_lang$virtual_dom$VirtualDom_History$nextAddress = F2(
+	function (forward, groupCollapsed) {
+		return groupCollapsed ? (forward ? _elm_lang$virtual_dom$VirtualDom_History$incrementGroup : _elm_lang$virtual_dom$VirtualDom_History$decrementGroup) : (forward ? _elm_lang$virtual_dom$VirtualDom_History$increment : _elm_lang$virtual_dom$VirtualDom_History$decrement);
+	});
 var _elm_lang$virtual_dom$VirtualDom_History$nextVisibleAddress = F3(
-	function (forward, fromAddress, history) {
-		var _p5 = A2(_elm_lang$virtual_dom$VirtualDom_History$findGroup, fromAddress, history);
-		if (_p5.ctor === 'Just') {
+	function (forward, from, history) {
+		var _p1 = A3(_elm_lang$virtual_dom$VirtualDom_History$getGroup, from.snapshot, from.group, history);
+		if (_p1.ctor === 'Just') {
 			return A2(
 				_elm_lang$virtual_dom$VirtualDom_History$validateAddress,
 				history,
-				A3(_elm_lang$virtual_dom$VirtualDom_History$nextAddress, forward, _p5._0._0.collapsed, _p5._0._1));
+				A3(_elm_lang$virtual_dom$VirtualDom_History$nextAddress, forward, _p1._0.collapsed, from));
 		} else {
 			return _elm_lang$core$Native_Utils.crashCase(
 				'VirtualDom.History',
 				{
-					start: {line: 386, column: 3},
-					end: {line: 391, column: 92}
+					start: {line: 337, column: 3},
+					end: {line: 342, column: 85}
 				},
-				_p5)(
+				_p1)(
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					'UI should only let you ask for real indexes! ',
-					_elm_lang$core$Basics$toString(fromAddress)));
+					_elm_lang$core$Basics$toString(from)));
 		}
 	});
-var _elm_lang$virtual_dom$VirtualDom_History$visibleAddressBefore = _elm_lang$virtual_dom$VirtualDom_History$nextVisibleAddress(false);
 var _elm_lang$virtual_dom$VirtualDom_History$visibleAddressAfter = _elm_lang$virtual_dom$VirtualDom_History$nextVisibleAddress(true);
+var _elm_lang$virtual_dom$VirtualDom_History$visibleAddressBefore = _elm_lang$virtual_dom$VirtualDom_History$nextVisibleAddress(false);
 var _elm_lang$virtual_dom$VirtualDom_History$undone = function (getResult) {
-	var _p7 = getResult;
-	if (_p7.ctor === 'Done') {
-		return {ctor: '_Tuple2', _0: _p7._1, _1: _p7._0};
+	var _p3 = getResult;
+	if (_p3.ctor === 'Done') {
+		return {ctor: '_Tuple2', _0: _p3._1, _1: _p3._0};
 	} else {
 		return _elm_lang$core$Native_Utils.crashCase(
 			'VirtualDom.History',
 			{
-				start: {line: 302, column: 3},
-				end: {line: 307, column: 39}
+				start: {line: 306, column: 3},
+				end: {line: 311, column: 39}
 			},
-			_p7)('Bug in History.get');
+			_p3)('Bug in History.get');
 	}
 };
 var _elm_lang$virtual_dom$VirtualDom_History$isImmediateAfter = F2(
@@ -10904,8 +10910,8 @@ var _elm_lang$virtual_dom$VirtualDom_History$isSameGroup = F2(
 		return (!_elm_lang$core$Native_Utils.eq(groupName1, '')) && _elm_lang$core$Native_Utils.eq(groupName1, groupName2);
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$updateLatestGroup = F4(
-	function (lastTimestamp, timestamp, msg, group) {
-		var collapsed = (_elm_lang$core$Native_Utils.eq(group.numMessages, 1) && A2(_elm_lang$virtual_dom$VirtualDom_History$isImmediateAfter, lastTimestamp, timestamp)) ? true : ((_elm_lang$core$Native_Utils.eq(group.numMessages, 5) && _elm_lang$core$Native_Utils.eq(timestamp, _elm_lang$core$Maybe$Nothing)) ? true : group.collapsed);
+	function (fast, imported, msg, group) {
+		var collapsed = (_elm_lang$core$Native_Utils.eq(group.numMessages, 1) && fast) ? true : ((_elm_lang$core$Native_Utils.eq(group.numMessages, 5) && imported) ? true : group.collapsed);
 		return _elm_lang$core$Native_Utils.update(
 			group,
 			{
@@ -10938,169 +10944,166 @@ var _elm_lang$virtual_dom$VirtualDom_History$consEncodedSnapshot = F2(
 	function (snapshot, allMessages) {
 		return A2(_elm_lang$virtual_dom$VirtualDom_History$consEncodedGroups, snapshot.groups, allMessages);
 	});
-var _elm_lang$virtual_dom$VirtualDom_History$encode = function (_p9) {
-	var _p10 = _p9;
+var _elm_lang$virtual_dom$VirtualDom_History$encode = function (_p5) {
+	var _p6 = _p5;
 	var recentJson = A2(
 		_elm_lang$virtual_dom$VirtualDom_History$consEncodedGroups,
-		_p10.recent.groups,
+		_p6.recent.groups,
 		{ctor: '[]'});
 	return _elm_lang$core$Json_Encode$list(
-		A3(_elm_lang$core$Array$foldr, _elm_lang$virtual_dom$VirtualDom_History$consEncodedSnapshot, recentJson, _p10.snapshots));
+		A3(_elm_lang$core$Array$foldr, _elm_lang$virtual_dom$VirtualDom_History$consEncodedSnapshot, recentJson, _p6.snapshots));
 };
 var _elm_lang$virtual_dom$VirtualDom_History$jsToElm = _elm_lang$virtual_dom$Native_Debug.unsafeCoerce;
 var _elm_lang$virtual_dom$VirtualDom_History$lastMessage = function (group) {
-	var _p11 = group.messages;
-	if (_p11.ctor === '[]') {
+	var _p7 = group.messages;
+	if (_p7.ctor === '[]') {
 		return _elm_lang$core$Native_Utils.crashCase(
 			'VirtualDom.History',
 			{
-				start: {line: 102, column: 3},
-				end: {line: 107, column: 11}
+				start: {line: 101, column: 3},
+				end: {line: 106, column: 11}
 			},
-			_p11)('Group must contain at least one message.');
+			_p7)('Group must contain at least one message.');
 	} else {
-		return _p11._0;
+		return _p7._0;
 	}
 };
-var _elm_lang$virtual_dom$VirtualDom_History$initGroup = F2(
-	function (groupName, msg) {
-		return {
-			name: groupName,
-			collapsed: false,
-			messages: {
-				ctor: '::',
-				_0: msg,
-				_1: {ctor: '[]'}
-			},
-			numMessages: 1
-		};
-	});
-var _elm_lang$virtual_dom$VirtualDom_History$initialModel = function (_p13) {
-	var _p14 = _p13;
-	var _p15 = A2(_elm_lang$core$Array$get, 0, _p14.snapshots);
-	if (_p15.ctor === 'Just') {
-		return _p15._0.model;
+var _elm_lang$virtual_dom$VirtualDom_History$initGroup = function (msg) {
+	return {
+		collapsed: false,
+		messages: {
+			ctor: '::',
+			_0: msg,
+			_1: {ctor: '[]'}
+		},
+		numMessages: 1
+	};
+};
+var _elm_lang$virtual_dom$VirtualDom_History$initialModel = function (_p9) {
+	var _p10 = _p9;
+	var _p11 = A2(_elm_lang$core$Array$get, 0, _p10.snapshots);
+	if (_p11.ctor === 'Just') {
+		return _p11._0.model;
 	} else {
-		return _p14.recent.model;
+		return _p10.recent.model;
 	}
 };
 var _elm_lang$virtual_dom$VirtualDom_History$size = function (history) {
 	return history.numMessages;
 };
 var _elm_lang$virtual_dom$VirtualDom_History$minSnapshotSize = 64;
-var _elm_lang$virtual_dom$VirtualDom_History$addMessageToGroups = F5(
-	function (lastTimestamp, timestamp, msg, numMessages, groups) {
-		var groupName = _elm_lang$virtual_dom$Native_Debug.messageToGroupName(msg);
-		var _p16 = A2(
-			_elm_lang$core$Array$get,
-			_elm_lang$core$Array$length(groups) - 1,
-			groups);
-		if (_p16.ctor === 'Nothing') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Array$fromList(
-					{
-						ctor: '::',
-						_0: A2(_elm_lang$virtual_dom$VirtualDom_History$initGroup, groupName, msg),
-						_1: {ctor: '[]'}
-					}),
-				_1: _elm_lang$core$Maybe$Nothing
-			};
-		} else {
-			var _p17 = _p16._0;
-			return A2(_elm_lang$virtual_dom$VirtualDom_History$isSameGroup, groupName, _p17.name) ? {
-				ctor: '_Tuple2',
-				_0: A3(
-					_elm_lang$core$Array$set,
-					_elm_lang$core$Array$length(groups) - 1,
-					A4(_elm_lang$virtual_dom$VirtualDom_History$updateLatestGroup, lastTimestamp, timestamp, msg, _p17),
-					groups),
-				_1: _elm_lang$core$Maybe$Nothing
-			} : ((_elm_lang$core$Native_Utils.cmp(numMessages, _elm_lang$virtual_dom$VirtualDom_History$minSnapshotSize) < 0) ? {
-				ctor: '_Tuple2',
-				_0: A2(
-					_elm_lang$core$Array$push,
-					A2(_elm_lang$virtual_dom$VirtualDom_History$initGroup, groupName, msg),
-					groups),
-				_1: _elm_lang$core$Maybe$Nothing
-			} : {
-				ctor: '_Tuple2',
-				_0: groups,
-				_1: _elm_lang$core$Maybe$Just(
-					A2(_elm_lang$virtual_dom$VirtualDom_History$initGroup, groupName, msg))
-			});
-		}
-	});
-var _elm_lang$virtual_dom$VirtualDom_History$History = F4(
-	function (a, b, c, d) {
-		return {snapshots: a, recent: b, numMessages: c, lastTimestamp: d};
+var _elm_lang$virtual_dom$VirtualDom_History$History = F5(
+	function (a, b, c, d, e) {
+		return {snapshots: a, recent: b, numMessages: c, lastTimestamp: d, lastGroupName: e};
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$Snapshot = F3(
 	function (a, b, c) {
 		return {model: a, groups: b, numMessages: c};
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$empty = function (model) {
-	return A4(
+	return A5(
 		_elm_lang$virtual_dom$VirtualDom_History$History,
 		_elm_lang$core$Array$empty,
 		A3(_elm_lang$virtual_dom$VirtualDom_History$Snapshot, model, _elm_lang$core$Array$empty, 0),
 		0,
-		_elm_lang$core$Maybe$Nothing);
+		_elm_lang$core$Maybe$Nothing,
+		'');
 };
-var _elm_lang$virtual_dom$VirtualDom_History$addRecent = F5(
-	function (lastTimestamp, timestamp, msg, model, recent) {
-		var _p18 = A5(_elm_lang$virtual_dom$VirtualDom_History$addMessageToGroups, lastTimestamp, timestamp, msg, recent.numMessages, recent.groups);
-		if (_p18._1.ctor === 'Just') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Maybe$Just(recent),
-				_1: A3(
-					_elm_lang$virtual_dom$VirtualDom_History$Snapshot,
-					model,
-					_elm_lang$core$Array$fromList(
+var _elm_lang$virtual_dom$VirtualDom_History$addRecent = F6(
+	function (sameGroup, fast, imported, msg, model, recent) {
+		if (sameGroup) {
+			var headGroup = function () {
+				var _p12 = A2(
+					_elm_lang$core$Array$get,
+					_elm_lang$core$Array$length(recent.groups) - 1,
+					recent.groups);
+				if (_p12.ctor === 'Just') {
+					return _p12._0;
+				} else {
+					return _elm_lang$core$Native_Utils.crashCase(
+						'VirtualDom.History',
 						{
-							ctor: '::',
-							_0: _p18._1._0,
-							_1: {ctor: '[]'}
-						}),
-					1)
-			};
-		} else {
+							start: {line: 195, column: 9},
+							end: {line: 199, column: 37}
+						},
+						_p12)('Bug in add');
+				}
+			}();
+			var newGroups = A3(
+				_elm_lang$core$Array$set,
+				_elm_lang$core$Array$length(recent.groups) - 1,
+				A4(_elm_lang$virtual_dom$VirtualDom_History$updateLatestGroup, fast, imported, msg, headGroup),
+				recent.groups);
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Maybe$Nothing,
-				_1: A3(_elm_lang$virtual_dom$VirtualDom_History$Snapshot, recent.model, _p18._0, recent.numMessages + 1)
+				_1: A3(_elm_lang$virtual_dom$VirtualDom_History$Snapshot, recent.model, newGroups, recent.numMessages + 1)
 			};
+		} else {
+			if (_elm_lang$core$Native_Utils.cmp(recent.numMessages, _elm_lang$virtual_dom$VirtualDom_History$minSnapshotSize) < 0) {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Maybe$Nothing,
+					_1: A3(
+						_elm_lang$virtual_dom$VirtualDom_History$Snapshot,
+						recent.model,
+						A2(
+							_elm_lang$core$Array$push,
+							_elm_lang$virtual_dom$VirtualDom_History$initGroup(msg),
+							recent.groups),
+						recent.numMessages + 1)
+				};
+			} else {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Maybe$Just(recent),
+					_1: A3(
+						_elm_lang$virtual_dom$VirtualDom_History$Snapshot,
+						model,
+						_elm_lang$core$Array$fromList(
+							{
+								ctor: '::',
+								_0: _elm_lang$virtual_dom$VirtualDom_History$initGroup(msg),
+								_1: {ctor: '[]'}
+							}),
+						1)
+				};
+			}
 		}
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$add = F4(
-	function (timestamp, msg, model, _p19) {
-		var _p20 = _p19;
-		var _p23 = _p20.snapshots;
-		var _p22 = _p20.numMessages;
-		var _p21 = A5(_elm_lang$virtual_dom$VirtualDom_History$addRecent, _p20.lastTimestamp, timestamp, msg, model, _p20.recent);
-		if (_p21._0.ctor === 'Just') {
-			return A4(
+	function (timestamp, msg, model, _p14) {
+		var _p15 = _p14;
+		var _p18 = _p15.snapshots;
+		var _p17 = _p15.numMessages;
+		var imported = _elm_lang$core$Native_Utils.eq(timestamp, _elm_lang$core$Maybe$Nothing);
+		var fast = A2(_elm_lang$virtual_dom$VirtualDom_History$isImmediateAfter, _p15.lastTimestamp, timestamp);
+		var groupName = _elm_lang$virtual_dom$Native_Debug.messageToGroupName(msg);
+		var sameGroup = A2(_elm_lang$virtual_dom$VirtualDom_History$isSameGroup, groupName, _p15.lastGroupName);
+		var _p16 = A6(_elm_lang$virtual_dom$VirtualDom_History$addRecent, sameGroup, fast, imported, msg, model, _p15.recent);
+		if (_p16._0.ctor === 'Just') {
+			return A5(
 				_elm_lang$virtual_dom$VirtualDom_History$History,
-				A2(_elm_lang$core$Array$push, _p21._0._0, _p23),
-				_p21._1,
-				_p22 + 1,
-				timestamp);
+				A2(_elm_lang$core$Array$push, _p16._0._0, _p18),
+				_p16._1,
+				_p17 + 1,
+				timestamp,
+				groupName);
 		} else {
-			return A4(_elm_lang$virtual_dom$VirtualDom_History$History, _p23, _p21._1, _p22 + 1, timestamp);
+			return A5(_elm_lang$virtual_dom$VirtualDom_History$History, _p18, _p16._1, _p17 + 1, timestamp, groupName);
 		}
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$decoder = F2(
 	function (initialModel, update) {
 		var addMessage = F2(
-			function (rawMsg, _p24) {
-				var _p25 = _p24;
-				var _p26 = _p25._0;
+			function (rawMsg, _p19) {
+				var _p20 = _p19;
+				var _p21 = _p20._0;
 				var msg = _elm_lang$virtual_dom$VirtualDom_History$jsToElm(rawMsg);
 				return {
 					ctor: '_Tuple2',
-					_0: A2(update, msg, _p26),
-					_1: A4(_elm_lang$virtual_dom$VirtualDom_History$add, _elm_lang$core$Maybe$Nothing, msg, _p26, _p25._1)
+					_0: A2(update, msg, _p21),
+					_1: A4(_elm_lang$virtual_dom$VirtualDom_History$add, _elm_lang$core$Maybe$Nothing, msg, _p21, _p20._1)
 				};
 			});
 		var updateModel = function (rawMsgs) {
@@ -11119,87 +11122,57 @@ var _elm_lang$virtual_dom$VirtualDom_History$decoder = F2(
 			updateModel,
 			_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$value));
 	});
-var _elm_lang$virtual_dom$VirtualDom_History$updateSnapshot = F3(
-	function (updateGroups, snapshotIndex, history) {
-		return _elm_lang$core$Native_Utils.eq(
-			snapshotIndex,
-			_elm_lang$core$Array$length(history.snapshots)) ? _elm_lang$core$Native_Utils.update(
-			history,
-			{
-				recent: A3(
-					_elm_lang$virtual_dom$VirtualDom_History$Snapshot,
-					history.recent.model,
-					updateGroups(history.recent.groups),
-					history.recent.numMessages)
-			}) : _elm_lang$core$Native_Utils.update(
-			history,
-			{
-				snapshots: A3(
-					_elm_lang$virtual_dom$VirtualDom_History$arrayUpdate,
-					function (snapshot) {
-						var _p27 = snapshot;
-						if (_p27.ctor === 'Just') {
-							var _p28 = _p27._0;
-							return _elm_lang$core$Maybe$Just(
-								A3(
-									_elm_lang$virtual_dom$VirtualDom_History$Snapshot,
-									_p28.model,
-									updateGroups(_p28.groups),
-									_p28.numMessages));
-						} else {
-							return _elm_lang$core$Native_Utils.crashCase(
-								'VirtualDom.History',
-								{
-									start: {line: 452, column: 17},
-									end: {line: 457, column: 79}
-								},
-								_p27)('UI should only let you ask for real indexes!');
-						}
-					},
-					snapshotIndex,
-					history.snapshots)
-			});
+var _elm_lang$virtual_dom$VirtualDom_History$updateGroup = F4(
+	function (fg, snapshotIndex, groupIndex, history) {
+		var fs = function (snapshot) {
+			return A3(
+				_elm_lang$virtual_dom$VirtualDom_History$Snapshot,
+				snapshot.model,
+				A3(_elm_lang$virtual_dom$VirtualDom_History$arrayUpdate, fg, groupIndex, snapshot.groups),
+				snapshot.numMessages);
+		};
+		return A3(_elm_lang$virtual_dom$VirtualDom_History$updateSnapshot, fs, snapshotIndex, history);
 	});
-var _elm_lang$virtual_dom$VirtualDom_History$updateGroup = F3(
+var _elm_lang$virtual_dom$VirtualDom_History$toggleGroup = F3(
 	function (collapsed, address, history) {
-		var updateGroup = function (maybeGroup) {
-			var _p30 = maybeGroup;
-			if (_p30.ctor === 'Just') {
-				var _p31 = _p30._0;
-				return (_elm_lang$core$Native_Utils.cmp(
-					_elm_lang$core$List$length(_p31.messages),
-					2) > -1) ? _elm_lang$core$Maybe$Just(
-					_elm_lang$core$Native_Utils.update(
-						_p31,
-						{collapsed: collapsed})) : _elm_lang$core$Maybe$Nothing;
-			} else {
-				return _elm_lang$core$Native_Utils.crashCase(
-					'VirtualDom.History',
-					{
-						start: {line: 418, column: 7},
-						end: {line: 426, column: 69}
+		var _p22 = A3(_elm_lang$virtual_dom$VirtualDom_History$getGroup, address.snapshot, address.group, history);
+		if (_p22.ctor === 'Just') {
+			var _p24 = _p22._0;
+			return ((_elm_lang$core$Native_Utils.cmp(_p24.numMessages, 2) > -1) && (!_elm_lang$core$Native_Utils.eq(_p24.collapsed, collapsed))) ? {
+				ctor: '_Tuple2',
+				_0: A4(
+					_elm_lang$virtual_dom$VirtualDom_History$updateGroup,
+					function (_p23) {
+						return _elm_lang$core$Native_Utils.update(
+							_p24,
+							{collapsed: collapsed});
 					},
-					_p30)('UI should only let you ask for real indexes!');
-			}
-		};
-		var newHistory = A3(
-			_elm_lang$virtual_dom$VirtualDom_History$updateSnapshot,
-			A2(_elm_lang$virtual_dom$VirtualDom_History$arrayUpdate, updateGroup, address.group),
-			address.snapshot,
-			history);
-		return {
-			ctor: '_Tuple2',
-			_0: newHistory,
-			_1: _elm_lang$core$Native_Utils.update(
-				address,
-				{message: 0})
-		};
+					address.snapshot,
+					address.group,
+					history),
+				_1: _elm_lang$core$Native_Utils.update(
+					address,
+					{message: 0})
+			} : {ctor: '_Tuple2', _0: history, _1: address};
+		} else {
+			return _elm_lang$core$Native_Utils.crashCase(
+				'VirtualDom.History',
+				{
+					start: {line: 367, column: 3},
+					end: {line: 381, column: 88}
+				},
+				_p22)(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'UI should only let you ask for real indexes! ',
+					_elm_lang$core$Basics$toString(address)));
+		}
 	});
-var _elm_lang$virtual_dom$VirtualDom_History$openGroup = _elm_lang$virtual_dom$VirtualDom_History$updateGroup(false);
-var _elm_lang$virtual_dom$VirtualDom_History$closeGroup = _elm_lang$virtual_dom$VirtualDom_History$updateGroup(true);
-var _elm_lang$virtual_dom$VirtualDom_History$Group = F4(
-	function (a, b, c, d) {
-		return {name: a, collapsed: b, messages: c, numMessages: d};
+var _elm_lang$virtual_dom$VirtualDom_History$openGroup = _elm_lang$virtual_dom$VirtualDom_History$toggleGroup(false);
+var _elm_lang$virtual_dom$VirtualDom_History$closeGroup = _elm_lang$virtual_dom$VirtualDom_History$toggleGroup(true);
+var _elm_lang$virtual_dom$VirtualDom_History$Group = F3(
+	function (a, b, c) {
+		return {collapsed: a, messages: b, numMessages: c};
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$Address = F3(
 	function (a, b, c) {
@@ -11226,44 +11199,44 @@ var _elm_lang$virtual_dom$VirtualDom_History$Stepping = F2(
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$getHelpHelp = F3(
 	function (update, msg, getResult) {
-		var _p33 = getResult;
-		if (_p33.ctor === 'Done') {
+		var _p26 = getResult;
+		if (_p26.ctor === 'Done') {
 			return getResult;
 		} else {
-			var _p35 = _p33._0;
-			var _p34 = _p33._1;
-			return _elm_lang$core$Native_Utils.eq(_p35, 0) ? A2(
+			var _p28 = _p26._0;
+			var _p27 = _p26._1;
+			return _elm_lang$core$Native_Utils.eq(_p28, 0) ? A2(
 				_elm_lang$virtual_dom$VirtualDom_History$Done,
 				msg,
-				A2(update, msg, _p34)) : A2(
+				A2(update, msg, _p27)) : A2(
 				_elm_lang$virtual_dom$VirtualDom_History$Stepping,
-				_p35 - 1,
-				A2(update, msg, _p34));
+				_p28 - 1,
+				A2(update, msg, _p27));
 		}
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$getHelp = F4(
 	function (update, messageIndex, group, getResult) {
-		var _p36 = getResult;
-		if (_p36.ctor === 'Done') {
+		var _p29 = getResult;
+		if (_p29.ctor === 'Done') {
 			return getResult;
 		} else {
-			var _p38 = _p36._0;
-			var _p37 = _p36._1;
-			return _elm_lang$core$Native_Utils.eq(_p38, 0) ? A3(
+			var _p31 = _p29._0;
+			var _p30 = _p29._1;
+			return _elm_lang$core$Native_Utils.eq(_p31, 0) ? A3(
 				_elm_lang$core$List$foldr,
 				_elm_lang$virtual_dom$VirtualDom_History$getHelpHelp(update),
-				A2(_elm_lang$virtual_dom$VirtualDom_History$Stepping, messageIndex, _p37),
+				A2(_elm_lang$virtual_dom$VirtualDom_History$Stepping, messageIndex, _p30),
 				group.messages) : A2(
 				_elm_lang$virtual_dom$VirtualDom_History$Stepping,
-				_p38 - 1,
-				A3(_elm_lang$core$List$foldr, update, _p37, group.messages));
+				_p31 - 1,
+				A3(_elm_lang$core$List$foldr, update, _p30, group.messages));
 		}
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$get = F3(
 	function (update, address, history) {
-		var _p39 = A2(_elm_lang$virtual_dom$VirtualDom_History$findSnapshot, address, history);
-		if (_p39.ctor === 'Just') {
-			var _p40 = _p39._0;
+		var _p32 = A2(_elm_lang$virtual_dom$VirtualDom_History$getSnapshot, address.snapshot, history);
+		if (_p32.ctor === 'Just') {
+			var _p33 = _p32._0;
 			var updateHelp = F2(
 				function (msg, model) {
 					return _elm_lang$core$Tuple$first(
@@ -11273,16 +11246,16 @@ var _elm_lang$virtual_dom$VirtualDom_History$get = F3(
 				A3(
 					_elm_lang$core$Array$foldl,
 					A2(_elm_lang$virtual_dom$VirtualDom_History$getHelp, updateHelp, address.message),
-					A2(_elm_lang$virtual_dom$VirtualDom_History$Stepping, address.group, _p40.model),
-					_p40.groups));
+					A2(_elm_lang$virtual_dom$VirtualDom_History$Stepping, address.group, _p33.model),
+					_p33.groups));
 		} else {
 			return _elm_lang$core$Native_Utils.crashCase(
 				'VirtualDom.History',
 				{
-					start: {line: 255, column: 3},
-					end: {line: 265, column: 88}
+					start: {line: 259, column: 3},
+					end: {line: 269, column: 88}
 				},
-				_p39)(
+				_p32)(
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					'UI should only let you ask for real indexes! ',
@@ -11321,7 +11294,11 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewRow = F3(
 					{
 						ctor: '::',
 						_0: _elm_lang$virtual_dom$VirtualDom_Helpers$class('messages-entry-content'),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(_elm_lang$virtual_dom$VirtualDom_Helpers$attribute, 'title', content),
+							_1: {ctor: '[]'}
+						}
 					},
 					{
 						ctor: '::',
@@ -11353,9 +11330,9 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewCollapsedMessage = F5(
 			'..',
 			_elm_lang$core$Basics$toString(lastIndex));
 		var selected = function () {
-			var _p42 = currentAddress;
-			if (_p42.ctor === 'Just') {
-				return _elm_lang$core$Native_Utils.eq(_p42._0.group, groupIndex);
+			var _p35 = currentAddress;
+			if (_p35.ctor === 'Just') {
+				return _elm_lang$core$Native_Utils.eq(_p35._0.group, groupIndex);
 			} else {
 				return false;
 			}
@@ -11376,9 +11353,9 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewCollapsedMessage = F5(
 var _elm_lang$virtual_dom$VirtualDom_History$viewMessage = F4(
 	function (currentAddress, index, msgIndex, msg) {
 		var selected = function () {
-			var _p43 = currentAddress;
-			if (_p43.ctor === 'Just') {
-				return _elm_lang$core$Native_Utils.eq(_p43._0.message, msgIndex);
+			var _p36 = currentAddress;
+			if (_p36.ctor === 'Just') {
+				return _elm_lang$core$Native_Utils.eq(_p36._0.message, msgIndex);
 			} else {
 				return false;
 			}
@@ -11397,18 +11374,18 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewMessage = F4(
 				_elm_lang$virtual_dom$Native_Debug.messageToString(msg)));
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$consMsg = F3(
-	function (currentAddress, msg, _p44) {
-		var _p45 = _p44;
-		var _p47 = _p45._1;
-		var _p46 = _p45._0;
+	function (currentAddress, msg, _p37) {
+		var _p38 = _p37;
+		var _p40 = _p38._1;
+		var _p39 = _p38._0;
 		return {
 			ctor: '_Tuple3',
-			_0: _p46 - 1,
-			_1: _p47 - 1,
+			_0: _p39 - 1,
+			_1: _p40 - 1,
 			_2: {
 				ctor: '::',
-				_0: A4(_elm_lang$virtual_dom$VirtualDom_History$viewMessage, currentAddress, _p46, _p47, msg),
-				_1: _p45._2
+				_0: A4(_elm_lang$virtual_dom$VirtualDom_History$viewMessage, currentAddress, _p39, _p40, msg),
+				_1: _p38._2
 			}
 		};
 	});
@@ -11450,9 +11427,9 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewGroup = F4(
 				index,
 				_elm_lang$virtual_dom$VirtualDom_History$lastMessage(group)),
 			_1: {ctor: '[]'}
-		} : function (_p48) {
-			var _p49 = _p48;
-			return _p49._2;
+		} : function (_p41) {
+			var _p42 = _p41;
+			return _p42._2;
 		}(
 			A3(
 				_elm_lang$core$List$foldl,
@@ -11480,35 +11457,35 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewGroup = F4(
 				{ctor: '::', _0: folder, _1: children}));
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$consGroup = F3(
-	function (currentAddress, group, _p50) {
-		var _p51 = _p50;
-		var _p53 = _p51._0;
-		var _p52 = _p51._1;
+	function (currentAddress, group, _p43) {
+		var _p44 = _p43;
+		var _p46 = _p44._0;
+		var _p45 = _p44._1;
 		var currentAddressHelp = A2(
 			_elm_lang$core$Maybe$andThen,
-			_elm_lang$virtual_dom$VirtualDom_History$filterByGroup(_p52),
+			_elm_lang$virtual_dom$VirtualDom_History$filterAddressByGroup(_p45),
 			currentAddress);
 		return {
 			ctor: '_Tuple3',
-			_0: _p53 - group.numMessages,
-			_1: _p52 - 1,
+			_0: _p46 - group.numMessages,
+			_1: _p45 - 1,
 			_2: {
 				ctor: '::',
-				_0: A4(_elm_lang$virtual_dom$VirtualDom_History$viewGroup, currentAddressHelp, _p53, _p52, group),
-				_1: _p51._2
+				_0: A4(_elm_lang$virtual_dom$VirtualDom_History$viewGroup, currentAddressHelp, _p46, _p45, group),
+				_1: _p44._2
 			}
 		};
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$viewSnapshot = F3(
-	function (currentAddress, index, _p54) {
-		var _p55 = _p54;
-		var _p58 = _p55.groups;
+	function (currentAddress, index, _p47) {
+		var _p48 = _p47;
+		var _p51 = _p48.groups;
 		return A2(
 			_elm_lang$virtual_dom$VirtualDom_Helpers$div,
 			{ctor: '[]'},
-			function (_p56) {
-				var _p57 = _p56;
-				return _p57._2;
+			function (_p49) {
+				var _p50 = _p49;
+				return _p50._2;
 			}(
 				A3(
 					_elm_lang$core$Array$foldr,
@@ -11516,24 +11493,24 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewSnapshot = F3(
 					{
 						ctor: '_Tuple3',
 						_0: index - 1,
-						_1: _elm_lang$core$Array$length(_p58) - 1,
+						_1: _elm_lang$core$Array$length(_p51) - 1,
 						_2: {ctor: '[]'}
 					},
-					_p58)));
+					_p51)));
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$consSnapshot = F3(
-	function (currentAddress, snapshot, _p59) {
-		var _p60 = _p59;
-		var _p62 = _p60._1;
-		var _p61 = _p60._0;
+	function (currentAddress, snapshot, _p52) {
+		var _p53 = _p52;
+		var _p55 = _p53._1;
+		var _p54 = _p53._0;
 		var currentAddressHelp = A2(
 			_elm_lang$core$Maybe$andThen,
-			_elm_lang$virtual_dom$VirtualDom_History$filterBySnapshot(_p62),
+			_elm_lang$virtual_dom$VirtualDom_History$filterAddressBySnapshot(_p55),
 			currentAddress);
 		return {
 			ctor: '_Tuple3',
-			_0: _p61 - snapshot.numMessages,
-			_1: _p62 - 1,
+			_0: _p54 - snapshot.numMessages,
+			_1: _p55 - 1,
 			_2: {
 				ctor: '::',
 				_0: A2(
@@ -11541,9 +11518,9 @@ var _elm_lang$virtual_dom$VirtualDom_History$consSnapshot = F3(
 					F2(
 						function (x, y) {
 							return y(x);
-						})(_p62),
-					A4(_elm_lang$virtual_dom$VirtualDom_Helpers$lazy3, _elm_lang$virtual_dom$VirtualDom_History$viewSnapshot, currentAddressHelp, _p61, snapshot)),
-				_1: _p60._2
+						})(_p55),
+					A4(_elm_lang$virtual_dom$VirtualDom_Helpers$lazy3, _elm_lang$virtual_dom$VirtualDom_History$viewSnapshot, currentAddressHelp, _p54, snapshot)),
+				_1: _p53._2
 			}
 		};
 	});
@@ -11552,9 +11529,9 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewSnapshots = F3(
 		return A2(
 			_elm_lang$virtual_dom$VirtualDom_Helpers$div,
 			{ctor: '[]'},
-			function (_p63) {
-				var _p64 = _p63;
-				return _p64._2;
+			function (_p56) {
+				var _p57 = _p56;
+				return _p57._2;
 			}(
 				A3(
 					_elm_lang$core$Array$foldr,
@@ -11568,15 +11545,15 @@ var _elm_lang$virtual_dom$VirtualDom_History$viewSnapshots = F3(
 					snapshots)));
 	});
 var _elm_lang$virtual_dom$VirtualDom_History$view = F2(
-	function (currentAddress, _p65) {
-		var _p66 = _p65;
-		var _p71 = _p66.snapshots;
-		var _p70 = _p66.recent;
-		var _p69 = _p66.numMessages;
+	function (currentAddress, _p58) {
+		var _p59 = _p58;
+		var _p64 = _p59.snapshots;
+		var _p63 = _p59.recent;
+		var _p62 = _p59.numMessages;
 		var currentAddressHelp = A2(
 			_elm_lang$core$Maybe$andThen,
-			_elm_lang$virtual_dom$VirtualDom_History$filterBySnapshot(
-				_elm_lang$core$Array$length(_p71)),
+			_elm_lang$virtual_dom$VirtualDom_History$filterAddressBySnapshot(
+				_elm_lang$core$Array$length(_p64)),
 			currentAddress);
 		var newStuff = A2(
 			_elm_lang$virtual_dom$VirtualDom_Helpers$map,
@@ -11584,25 +11561,25 @@ var _elm_lang$virtual_dom$VirtualDom_History$view = F2(
 				function (x, y) {
 					return y(x);
 				})(
-				_elm_lang$core$Array$length(_p71)),
+				_elm_lang$core$Array$length(_p64)),
 			A2(
 				_elm_lang$virtual_dom$VirtualDom_Helpers$div,
 				{ctor: '[]'},
-				function (_p67) {
-					var _p68 = _p67;
-					return _p68._2;
+				function (_p60) {
+					var _p61 = _p60;
+					return _p61._2;
 				}(
 					A3(
 						_elm_lang$core$Array$foldr,
 						_elm_lang$virtual_dom$VirtualDom_History$consGroup(currentAddressHelp),
 						{
 							ctor: '_Tuple3',
-							_0: _p69 - 1,
-							_1: _elm_lang$core$Array$length(_p70.groups) - 1,
+							_0: _p62 - 1,
+							_1: _elm_lang$core$Array$length(_p63.groups) - 1,
 							_2: {ctor: '[]'}
 						},
-						_p70.groups))));
-		var oldStuff = A4(_elm_lang$virtual_dom$VirtualDom_Helpers$lazy3, _elm_lang$virtual_dom$VirtualDom_History$viewSnapshots, currentAddress, _p69 - _p70.numMessages, _p71);
+						_p63.groups))));
+		var oldStuff = A4(_elm_lang$virtual_dom$VirtualDom_Helpers$lazy3, _elm_lang$virtual_dom$VirtualDom_History$viewSnapshots, currentAddress, _p62 - _p63.numMessages, _p64);
 		var className = _elm_lang$core$Native_Utils.eq(currentAddress, _elm_lang$core$Maybe$Nothing) ? 'debugger-sidebar-messages' : 'debugger-sidebar-messages-paused';
 		return A2(
 			_elm_lang$virtual_dom$VirtualDom_Helpers$div,
