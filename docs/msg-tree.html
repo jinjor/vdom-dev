@@ -10287,18 +10287,7 @@ var _elm_lang$virtual_dom$VirtualDom_History$groupToggleButton = function (s) {
 		},
 		{
 			ctor: '::',
-			_0: A2(
-				_elm_lang$virtual_dom$VirtualDom_Helpers$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$virtual_dom$VirtualDom_Helpers$class('messages-group-button-text'),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$virtual_dom$VirtualDom_Helpers$text(s),
-					_1: {ctor: '[]'}
-				}),
+			_0: _elm_lang$virtual_dom$VirtualDom_Helpers$text(s),
 			_1: {ctor: '[]'}
 		});
 };
@@ -10313,7 +10302,7 @@ var _elm_lang$virtual_dom$VirtualDom_History$groupFolderHelp = function (group) 
 				_1: {ctor: '[]'}
 			};
 		} else {
-			var height = (_elm_lang$core$Basics$toFloat(group.numMessages) - 1.5) * 26;
+			var height = (_elm_lang$core$Basics$toFloat(group.numMessages) - 1.5) * 2;
 			var groupGuide = A2(
 				_elm_lang$virtual_dom$VirtualDom_Helpers$div,
 				{
@@ -10330,7 +10319,7 @@ var _elm_lang$virtual_dom$VirtualDom_History$groupFolderHelp = function (group) 
 									_1: A2(
 										_elm_lang$core$Basics_ops['++'],
 										_elm_lang$core$Basics$toString(height),
-										'px')
+										'em')
 								},
 								_1: {ctor: '[]'}
 							}),
@@ -11983,7 +11972,7 @@ var _elm_lang$virtual_dom$VirtualDom_Debug$styles = A3(
 	{ctor: '[]'},
 	{
 		ctor: '::',
-		_0: _elm_lang$virtual_dom$VirtualDom_Helpers$text('\n\nhtml {\n    overflow: hidden;\n    height: 100%;\n}\n\nbody {\n    height: 100%;\n    overflow: auto;\n}\n\n#debugger {\n  width: 100%\n  height: 100%;\n  font-family: monospace;\n}\n\n#values {\n  display: block;\n  float: left;\n  height: 100%;\n  width: calc(100% - 30ch);\n  margin: 0;\n  overflow: auto;\n  cursor: default;\n}\n\n.debugger-sidebar {\n  display: block;\n  float: left;\n  width: 30ch;\n  height: 100%;\n  color: white;\n  background-color: rgb(61, 61, 61);\n}\n\n.debugger-sidebar-controls {\n  width: 100%;\n  text-align: center;\n  background-color: rgb(50, 50, 50);\n}\n\n.debugger-sidebar-controls-import-export {\n  width: 100%;\n  height: 24px;\n  line-height: 24px;\n  font-size: 12px;\n}\n\n.debugger-sidebar-controls-resume {\n  width: 100%;\n  height: 30px;\n  line-height: 30px;\n  cursor: pointer;\n}\n\n.debugger-sidebar-controls-resume:hover {\n  background-color: rgb(41, 41, 41);\n}\n\n.debugger-sidebar-messages {\n  width: 100%;\n  overflow-y: auto;\n  height: calc(100% - 24px);\n}\n\n.debugger-sidebar-messages-paused {\n  width: 100%;\n  overflow-y: auto;\n  height: calc(100% - 54px);\n}\n\n.messages-group {\n  position: relative;\n}\n\n.message-group-folder {\n  cursor: pointer;\n  height: 100%;\n  position: absolute;\n  width: 3ch;\n}\n\n.messages-group-button {\n  width: 12px;\n  height: 12px;\n  left: 4px;\n  top: 7px;\n  text-align: center;\n  font-size: 10px;\n  color: #666;\n  position: absolute;\n  border: solid 1px #666;\n}\n\n.messages-group-button-text {\n  margin-top: -2px;\n}\n\n.messages-group-guide {\n  top: 26px;\n  left: 10px;\n  width: 5px;\n  border-left: solid 1px #666;\n  border-bottom: solid 1px #666;\n  position: absolute;\n}\n\n.messages-entry {\n  cursor: pointer;\n  width: 100%;\n}\n\n.messages-entry:hover {\n  background-color: rgb(41, 41, 41);\n}\n\n.messages-entry-selected, .messages-entry-selected:hover {\n  background-color: rgb(10, 10, 10);\n}\n\n.messages-entry-content {\n  width: calc(100% - 11ch);\n  padding-top: 4px;\n  padding-bottom: 4px;\n  padding-left: 3ch;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  overflow: hidden;\n  display: inline-block;\n}\n\n.messages-entry-index {\n  color: #666;\n  width: 7ch;\n  padding-top: 4px;\n  padding-bottom: 4px;\n  padding-right: 1ch;\n  text-align: right;\n  display: block;\n  float: right;\n}\n\n'),
+		_0: _elm_lang$virtual_dom$VirtualDom_Helpers$text('\n\nhtml {\n    overflow: hidden;\n    height: 100%;\n}\n\nbody {\n    height: 100%;\n    overflow: auto;\n}\n\n#debugger {\n  width: 100%\n  height: 100%;\n  font-family: monospace;\n}\n\n#values {\n  display: block;\n  float: left;\n  height: 100%;\n  width: calc(100% - 30ch);\n  margin: 0;\n  overflow: auto;\n  cursor: default;\n}\n\n.debugger-sidebar {\n  display: block;\n  float: left;\n  width: 30ch;\n  height: 100%;\n  color: white;\n  background-color: rgb(61, 61, 61);\n}\n\n.debugger-sidebar-controls {\n  width: 100%;\n  text-align: center;\n  background-color: rgb(50, 50, 50);\n}\n\n.debugger-sidebar-controls-import-export {\n  width: 100%;\n  height: 24px;\n  line-height: 24px;\n  font-size: 12px;\n}\n\n.debugger-sidebar-controls-resume {\n  width: 100%;\n  height: 30px;\n  line-height: 30px;\n  cursor: pointer;\n}\n\n.debugger-sidebar-controls-resume:hover {\n  background-color: rgb(41, 41, 41);\n}\n\n.debugger-sidebar-messages {\n  width: 100%;\n  overflow-y: auto;\n  height: calc(100% - 24px);\n}\n\n.debugger-sidebar-messages-paused {\n  width: 100%;\n  overflow-y: auto;\n  height: calc(100% - 54px);\n}\n\n.messages-group {\n  position: relative;\n}\n\n.message-group-folder {\n  cursor: pointer;\n  height: 100%;\n  position: absolute;\n  width: 3ch;\n}\n\n.messages-group-button {\n  width: 1.6ch;\n  height: 1.2em;\n  left: 0.7ch;\n  top: 0.4em;\n  text-align: center;\n  color: #666;\n  position: absolute;\n  border: solid 1px #666;\n  box-sizing: border-box;\n  line-height: 1em;\n}\n\n.messages-group-guide {\n  top: 2em;\n  left: 1.5ch;\n  width: 1ch;\n  border-left: solid 1px #666;\n  border-bottom: solid 1px #666;\n  position: absolute;\n}\n\n.messages-entry {\n  cursor: pointer;\n  width: 100%;\n  line-height: 2em;\n}\n\n.messages-entry:hover {\n  background-color: rgb(41, 41, 41);\n}\n\n.messages-entry-selected, .messages-entry-selected:hover {\n  background-color: rgb(10, 10, 10);\n}\n\n.messages-entry-content {\n  width: calc(100% - 11ch);\n  padding-left: 3ch;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  overflow: hidden;\n  display: inline-block;\n}\n\n.messages-entry-index {\n  color: #666;\n  width: 7ch;\n  padding-right: 1ch;\n  text-align: right;\n  display: block;\n  float: right;\n}\n\n'),
 		_1: {ctor: '[]'}
 	});
 var _elm_lang$virtual_dom$VirtualDom_Debug$button = F2(
